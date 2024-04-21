@@ -1,0 +1,25 @@
+[project]
+name="pymarch"
+description="ray marching"
+license = {text = "MIT License"}
+readme="README.md"
+version="21.04.2024.0"
+dependencies=[
+    "arcade@ git+https://github.com/pythonarcade/arcade#egg=development",
+    "imgui[pyglet]"
+]
+requires-python= ">= 3.11"
+authors =  [
+    {name = "DragonMoffon", email = "dumpy.spam.man@gmail.com"}
+]
+maintainers = [
+    {name = "DragonMoffon", email = "dumpy.spam.man@gmail.com"}
+]
+
+[tool.setuptools]
+packages = ["pymarch"]
+
+# There are multiple things called lux that are CLI
+# applications, so we name the cli run script luxgame.
+[project.scripts]
+march = "pymarch.march:main"
