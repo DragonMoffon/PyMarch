@@ -29,7 +29,7 @@ class MarchScene:
         self.points = set((x, y) for x in range(self.render_target.size[0]) for y in range(self.render_target.size[1]))
 
     def _get_world_dist(self, position: Vec3) -> float:
-        return min(self.max_dist, min(struct.SDF(position) for struct in self.structs))
+        return min(struct.SDF(position) for struct in self.structs)
 
     def _get_closest_struct(self, position: Vec3) -> MarchStruct:
         return self.structs[min((struct.SDF(position), idx) for idx, struct in enumerate(self.structs))[-1]]
