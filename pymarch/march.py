@@ -8,6 +8,7 @@ from pymarch.render_target import RenderTarget
 
 
 SMALL_STEP = Vec3(0.0001, 0.0, 0.0)
+FACTOR = 4
 
 
 class MarchScene:
@@ -23,7 +24,8 @@ class MarchScene:
         self.camera: CameraData = camera
 
         self.structs: tuple[MarchStruct, ...] = structs
-        self.render_target: RenderTarget = RenderTarget(get_window().size)
+        size = get_window().width // FACTOR, get_window().height // FACTOR
+        self.render_target: RenderTarget = RenderTarget(size)
 
         self.points: set[tuple[int, int]] = None
         self._create_points()
