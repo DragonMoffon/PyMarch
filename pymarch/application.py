@@ -1,5 +1,6 @@
 from arcade import Window
 from arcade.camera import CameraData
+import arcade.key
 
 from pyglet.math import Vec3
 
@@ -18,8 +19,12 @@ class MarchWindow(Window):
         self.march_scene = MarchScene((a, b, c), camera)
 
     def on_update(self, delta_time: float):
-        print(1/delta_time)
-        self.march_scene.do_marches(500)
+        self.march_scene.do_marches_timed(1/15)
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if symbol == arcade.key.DELETE:
+            self.march_scene.clear()
+        return super().on_key_press(symbol, modifiers)
 
     def on_draw(self):
         self.clear()

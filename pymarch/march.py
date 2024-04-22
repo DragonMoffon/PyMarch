@@ -1,5 +1,5 @@
 from random import randint
-
+import time
 from arcade import get_window, draw_point
 from arcade.camera import CameraData, PerspectiveProjectionData
 from pyglet.math import Vec3
@@ -26,6 +26,10 @@ class MarchScene:
         self.structs: tuple[MarchStruct, ...] = structs
         self.render_target: RenderTarget = RenderTarget(get_window().size)
 
+        self.points: set[tuple[int, int]] = None
+        self._create_points()
+
+    def _create_points(self):
         self.points = set((x, y) for x in range(self.render_target.size[0]) for y in range(self.render_target.size[1]))
 
     def _get_world_dist(self, position: Vec3) -> float:
@@ -72,6 +76,33 @@ class MarchScene:
                 start = r * x + u * y
                 colour = self._march_step(start, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
+
+    def do_marches_timed(self, target_time: float):
+        f = Vec3(*self.camera.forward)
+        u = Vec3(*self.camera.up)
+        r = f.cross(u)
+
+        over = False
+        stime = time.time()
+
+        with self.render_target.activate():
+            while not over:
+                if not len(self.points):
+                    return
+
+                self.march_count += 1
+                x, y = self.points.pop()
+
+                start = r * x + u * y
+                colour = self._march_step(start, f, 0.0, 0)
+                draw_point(x, y, colour, 1)
+
+                if time.time() > stime + target_time:
+                    over = True
+
+    def clear(self):
+        self.render_target.clear()
+        self._create_points()
 
     def draw(self):
         self.render_target.draw()
