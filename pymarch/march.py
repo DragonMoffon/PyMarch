@@ -94,7 +94,7 @@ class MarchScene:
                 x, y = self.points.pop()
 
                 start = r * x + u * y
-                colour = self._march_step(start * 2.0, f, 0.0, 0)
+                colour = self._march_step(start * 4.0, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
 
                 if time.time() > stime + target_time:
