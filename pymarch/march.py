@@ -1,7 +1,6 @@
-from random import randint
 import time
 from arcade import get_window, draw_point
-from arcade.camera import CameraData, PerspectiveProjectionData
+from arcade.camera import CameraData
 from pyglet.math import Vec3
 
 from pymarch.SDFs.marchstruct import MarchStruct
@@ -52,13 +51,13 @@ class MarchScene:
         closest_dist = self._get_world_dist(position)
 
         if closest_dist <= self.intersection_dist:
-            n = self._get_world_normal(position)
-            l = max(0.0, n.dot(self.light_dir))
-            c = self._get_closest_struct(position).colour
-            r, g, b = c * l
+            norm = self._get_world_normal(position)
+            light = max(0.0, norm.dot(self.light_dir))
+            color = self._get_closest_struct(position).colour
+            r, g, b = color * light
             return int(r * 255), int(g * 255), int(b * 255)
 
-        return self._march_step(position + direction * closest_dist, direction, travel_dist+closest_dist, step_count+1)
+        return self._march_step(position + direction * closest_dist, direction, travel_dist+closest_dist, step_count + 1)
 
     def do_marches(self, march_count: int = 1):
         f = Vec3(*self.camera.forward)
