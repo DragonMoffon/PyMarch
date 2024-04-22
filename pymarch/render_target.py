@@ -44,11 +44,13 @@ class RenderTarget:
         previous = self._ctx.active_framebuffer
         try:
             self._frame_buffer.use(force=force)
+            get_window().default_camera.use()
             if clear:
                 self.clear()
             yield self._frame_buffer
         finally:
             previous.use()
+            get_window().default_camera.use()
 
     def clear(self):
         self._frame_buffer.clear(

@@ -15,7 +15,7 @@ class MarchScene:
     def __init__(self, structs: tuple[MarchStruct, ...], camera: CameraData):
         self.march_count: int = 0
         self.max_dist: float = 100.0
-        self.max_step: int = 10
+        self.max_step: int = 32
         self.intersection_dist: float = 0.0005
 
         self.light_dir: Vec3 = Vec3(1.0, 0.5, 0.25).normalize()
@@ -23,13 +23,14 @@ class MarchScene:
         self.camera: CameraData = camera
 
         self.structs: tuple[MarchStruct, ...] = structs
-        self.render_target: RenderTarget = RenderTarget(get_window().size)
+        w, h = get_window().size
+        self.render_target: RenderTarget = RenderTarget((w//4, h//4))
 
         self.points: set[tuple[int, int]] = None
         self._create_points()
 
     def _create_points(self):
-        self.points = set((x, y) for x in range(self.render_target.size[0]) for y in range(self.render_target.size[1]))
+        self.points = set((x, y) for x in range(0, self.render_target.size[0]) for y in range(self.render_target.size[1]))
 
     def _get_world_dist(self, position: Vec3) -> float:
         return min(struct.SDF(position) for struct in self.structs)
@@ -55,7 +56,7 @@ class MarchScene:
             light = max(0.0, norm.dot(self.light_dir))
             color = self._get_closest_struct(position).colour
             r, g, b = color * light
-            return int(r * 255), int(g * 255), int(b * 255)
+            return int(255 * r), int(255 * g), int(255 * b),
 
         return self._march_step(position + direction * closest_dist, direction, travel_dist+closest_dist, step_count + 1)
 
@@ -73,7 +74,7 @@ class MarchScene:
                 x, y = self.points.pop()
 
                 start = r * x + u * y
-                colour = self._march_step(start, f, 0.0, 0)
+                colour = self._march_step(start * 4.0, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
 
     def do_marches_timed(self, target_time: float):
@@ -93,7 +94,7 @@ class MarchScene:
                 x, y = self.points.pop()
 
                 start = r * x + u * y
-                colour = self._march_step(start, f, 0.0, 0)
+                colour = self._march_step(start * 2.0, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
 
                 if time.time() > stime + target_time:
