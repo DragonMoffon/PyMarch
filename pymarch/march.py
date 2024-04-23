@@ -25,7 +25,7 @@ class MarchScene:
 
         self.structs: tuple[MarchStruct, ...] = structs
         w, h = get_window().size
-        self.render_target: RenderTarget = RenderTarget((w//4, h//4))
+        self.render_target: RenderTarget = RenderTarget((w//FACTOR, h//FACTOR))
         self.points: set[tuple[int, int]] = None
         self._create_points()
 
@@ -74,7 +74,7 @@ class MarchScene:
                 x, y = self.points.pop()
 
                 start = r * x + u * y
-                colour = self._march_step(start * 4.0, f, 0.0, 0)
+                colour = self._march_step(start * FACTOR, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
 
     def do_marches_timed(self, target_time: float):
@@ -94,7 +94,7 @@ class MarchScene:
                 x, y = self.points.pop()
 
                 start = r * x + u * y
-                colour = self._march_step(start * 4.0, f, 0.0, 0)
+                colour = self._march_step(start * FACTOR, f, 0.0, 0)
                 draw_point(x, y, colour, 1)
 
                 if time.time() > stime + target_time:
