@@ -15,8 +15,8 @@ class MarchScene:
 
     def __init__(self, structs: tuple[MarchStruct, ...], camera: CameraData):
         self.march_count: int = 0
-        self.max_dist: float = 100.0
-        self.max_step: int = 32
+        self.max_dist: float = 1000.0
+        self.max_step: int = 64
         self.intersection_dist: float = 0.0005
 
         self.light_dir: Vec3 = Vec3(1.0, 0.5, 0.25).normalize()
